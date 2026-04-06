@@ -643,7 +643,7 @@ elif page == "📁 Bulk Scanner":
             return f"color:{c}; font-weight:700"
 
         styled = display_df.style\
-            .applymap(color_verdict, subset=["Verdict"])\
+           .map(color_verdict, subset=["Verdict"])
             .applymap(color_score, subset=["FraudScore(%)"])
 
         st.dataframe(styled, use_container_width=True, height=400)
