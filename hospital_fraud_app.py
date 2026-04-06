@@ -634,19 +634,24 @@ elif page == "📁 Bulk Scanner":
         st.info(f"Showing **{len(display_df)}** claims matching filters.")
 
         def color_verdict(val):
-            if val == "FRAUD":      return "background-color:#7f1d1d; color:#fca5a5"
-            if val == "SUSPICIOUS": return "background-color:#78350f; color:#fcd34d"
-            return "background-color:#14532d; color:#86efac"
+    if val == "FRAUD":
+        return "background-color:#7f1d1d; color:#fca5a5"
+    if val == "SUSPICIOUS":
+        return "background-color:#78350f; color:#fcd34d"
+    return "background-color:#14532d; color:#86efac"
 
-        def color_score(val):
-            c = score_color(val)
-            return f"color:{c}; font-weight:700"
+def color_score(val):
+    c = score_color(val)
+    return f"color:{c}; font-weight:700"
 
-        styled = display_df.style\
-               .map(color_verdict, subset=["Verdict"])
-                .applymap(color_score, subset=["FraudScore(%)"])
+# ✅ FIXED STYLER (no applymap, proper chaining)
+styled = (
+    display_df.style
+    .map(color_verdict, subset=["Verdict"])
+    .map(color_score, subset=["FraudScore(%)"])
+)
 
-        st.dataframe(styled, use_container_width=True, height=400)
+st.dataframe(styled, use_container_width=True, height=400)
 
         # Download
         out_csv = display_df.to_csv(index=False).encode()
